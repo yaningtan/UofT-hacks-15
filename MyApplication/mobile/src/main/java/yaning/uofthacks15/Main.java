@@ -54,7 +54,16 @@ public class Main extends ActionBarActivity {
 
                         //Justin's Function here
                         // Just the first line for now
-                        //
+                        //separable means the phrase has one or more *'s in it
+                        boolean separable = false;
+                        for (int i = 0; i <= input.length()-1; i++)
+                        {
+                            if(input.charAt(i)== '*')
+                            separable = true;
+                        }
+
+                        if(!separable)
+                            displaySuggestions(input);
 
                         if (input.charAt(input.length()-1) == '*')
                             displaySuggestions(input.split(" \\*")[0]);
@@ -62,7 +71,7 @@ public class Main extends ActionBarActivity {
                         else if (input.charAt (input.length()-1) != '*')
                         {displayAutocomplete(input);}
                         else
-                            textInput.setText("Not available yet.\n");
+                            textInput.setText("Not available yet.");
 
                     }
                 }
@@ -95,7 +104,9 @@ public class Main extends ActionBarActivity {
     //private String query;
     public void changeText(String[] suggestions) {
         TextView textInput = (TextView)findViewById(R.id.textInput);
+
         SpannableStringBuilder builder = new SpannableStringBuilder();
+
         //query = textInput.getText().toString();
         //query = "*";
         //query = query.replaceFirst("\\*", suggestions[0]);
@@ -177,7 +188,8 @@ public class Main extends ActionBarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        ResultParser.parse(response);
+                        TextView textInput = (TextView)findViewById(R.id.textInput);
+                        textInput.setText(ResultParser.parse(response));
                     }
                 }, new Response.ErrorListener() {
             @Override
