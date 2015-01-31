@@ -1,5 +1,6 @@
 package yaning.uofthacks15;
 
+
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -10,7 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
-
+import android.widget.Button;
+import android.widget.TextView;
 
 public class Main extends ActionBarActivity {
 
@@ -23,6 +25,25 @@ public class Main extends ActionBarActivity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        Button inputButton = (Button) findViewById(R.id.inputButton);
+
+        inputButton.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        TextView textInput =
+                                (TextView)findViewById(R.id.textInput);
+
+                        String input = textInput.getText().toString();
+
+                        //Justin's Function here
+                        //Andrew's Function also here
+
+                        textInput.setText("");
+
+                    }
+                }
+        );
     }
 
 
