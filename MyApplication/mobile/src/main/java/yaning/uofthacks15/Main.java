@@ -60,12 +60,8 @@ public class Main extends ActionBarActivity {
 
                         if(!separable)
                             displaySuggestions(input);
-
-                        if (input.charAt(input.length()-1) == '*')
-                            displaySuggestions(input.split(" \\*")[0]);
-                        //Andrew's Function also here
-                        else if (input.charAt (input.length()-1) != '*')
-                        {displayAutocomplete(input);}
+                        else if (input.charAt(input.length()-1) != '*')
+                            displayAutocomplete(input);
                         else
                             textInput.setText("Not available yet.");
 
@@ -103,12 +99,6 @@ public class Main extends ActionBarActivity {
         query = textInput.getText().toString();
         if(suggestions.length != 0 )
             query = suggestions[0];
-        //query = textInput.getText().toString();
-        //query = "*";
-        //query = query.replaceFirst("\\*", suggestions[0]);
-        query = suggestions[0];
-        // Apply formatting to the suggestion
-        //textInput = (TextView)findViewById(R.id.textInput);
         textInput.setText(query);
 
     }
@@ -129,10 +119,12 @@ public class Main extends ActionBarActivity {
                     public void onResponse(JSONArray response) {
                         try {
                             String[] suggestions = response.get(1).toString().split("\\[\"|\".\"|\"\\]");
-                            suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length-2);
 
-                            // Update the text field
-                            changeText(suggestions);
+                            if (suggestions.length > 1) {// Update the text field
+                                suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length - 1);
+                                changeText(suggestions);
+                            }
+
                         } catch (JSONException e) {
 
                         }
