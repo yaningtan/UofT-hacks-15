@@ -43,9 +43,12 @@ public class Main extends ActionBarActivity {
                         String input = textInput.getText().toString();
 
                         //Justin's Function here
+                        // Just the first line for now
+                        if (input.charAt(input.length()) == '*')
+                            displaySuggestions(input.split(" *")[0]);
                         //Andrew's Function also here
-
-                        textInput.setText("");
+                        else
+                            textInput.setText("Not available yet.\n");
 
                     }
                 }
