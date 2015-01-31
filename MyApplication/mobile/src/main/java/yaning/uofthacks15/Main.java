@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,8 @@ import org.json.JSONException;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 
 public class Main extends ActionBarActivity {
@@ -30,7 +33,7 @@ public class Main extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+//                    .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
 
@@ -44,6 +47,7 @@ public class Main extends ActionBarActivity {
 
                         String input = textInput.getText().toString();
 
+
                         //Justin's Function here
                         // Just the first line for now
                         //separable means the phrase has one or more *'s in it
@@ -56,7 +60,12 @@ public class Main extends ActionBarActivity {
 
                         if(!separable)
                             displaySuggestions(input);
+
+                        if (input.charAt(input.length()-1) == '*')
+                            displaySuggestions(input.split(" \\*")[0]);
                         //Andrew's Function also here
+                        else if (input.charAt (input.length()-1) != '*')
+                        {displayAutocomplete(input);}
                         else
                             textInput.setText("Not available yet.");
 
@@ -94,8 +103,12 @@ public class Main extends ActionBarActivity {
         query = textInput.getText().toString();
         if(suggestions.length != 0 )
             query = suggestions[0];
+        //query = textInput.getText().toString();
+        //query = "*";
+        //query = query.replaceFirst("\\*", suggestions[0]);
+        query = suggestions[0];
         // Apply formatting to the suggestion
-        textInput = (TextView)findViewById(R.id.textInput);
+        //textInput = (TextView)findViewById(R.id.textInput);
         textInput.setText(query);
 
     }
@@ -117,7 +130,7 @@ public class Main extends ActionBarActivity {
                         try {
                             String[] suggestions = response.get(1).toString().split("\\[\"|\".\"|\"\\]");
                             suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length-2);
-                            
+
                             // Update the text field
                             changeText(suggestions);
                         } catch (JSONException e) {
@@ -134,18 +147,43 @@ public class Main extends ActionBarActivity {
         requests.add(jsArrayRequest);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        public PlaceholderFragment() {
-        }
+    public void displayAutocomplete(String query) {
+        String url = "";
+        try {
+           url = "http://google.com/search?q=" + URLEncoder.encode('"' + query + '"', "UTF-8");
+        } catch (UnsupportedEncodingException e) {}
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        TextView textInput = (TextView)findViewById(R.id.textInput);
+                        textInput.setText(ResultParser.parse(response));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requests.add(stringRequest);
     }
+
+//    /**
+//     * A placeholder fragment containing a simple view.
+//     */
+//    public static class PlaceholderFragment extends Fragment {
+//        public PlaceholderFragment() {
+//        }
+//
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                                 Bundle savedInstanceState) {
+//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+//            return rootView;
+//        }
+//    }
 }
