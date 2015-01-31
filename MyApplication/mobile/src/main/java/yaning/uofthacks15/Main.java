@@ -20,6 +20,8 @@ import org.json.JSONException;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 
 public class Main extends ActionBarActivity {
@@ -31,7 +33,7 @@ public class Main extends ActionBarActivity {
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+//                    .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
 
@@ -45,11 +47,16 @@ public class Main extends ActionBarActivity {
 
                         String input = textInput.getText().toString();
 
+
                         //Justin's Function here
                         // Just the first line for now
+                        //
+
                         if (input.charAt(input.length()-1) == '*')
                             displaySuggestions(input.split(" \\*")[0]);
                         //Andrew's Function also here
+                        else if (input.charAt (input.length()-1) != '*')
+                        {displayAutocomplete(input);}
                         else
                             textInput.setText("Not available yet.\n");
 
@@ -84,10 +91,12 @@ public class Main extends ActionBarActivity {
     private String query;
     public void changeText(String[] suggestions) {
         TextView textInput = (TextView)findViewById(R.id.textInput);
-        query = textInput.getText().toString();
-        query = query.replaceFirst("\\*", suggestions[0]);
+        //query = textInput.getText().toString();
+        //query = "*";
+        //query = query.replaceFirst("\\*", suggestions[0]);
+        query = suggestions[0];
         // Apply formatting to the suggestion
-        textInput = (TextView)findViewById(R.id.textInput);
+        //textInput = (TextView)findViewById(R.id.textInput);
         textInput.setText(query);
 
     }
@@ -127,7 +136,10 @@ public class Main extends ActionBarActivity {
     }
 
     public void displayAutocomplete(String query) {
-        String url = "http://google.com/search?q=" + TextUtils.htmlEncode(query);
+        String url = "";
+        try {
+           url = "http://google.com/search?q=" + URLEncoder.encode('"' + query + '"', "UTF-8");
+        } catch (UnsupportedEncodingException e) {}
 
 
         // Request a string response from the provided URL.
@@ -147,18 +159,18 @@ public class Main extends ActionBarActivity {
         requests.add(stringRequest);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-    }
+//    /**
+//     * A placeholder fragment containing a simple view.
+//     */
+//    public static class PlaceholderFragment extends Fragment {
+//        public PlaceholderFragment() {
+//        }
+//
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                                 Bundle savedInstanceState) {
+//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+//            return rootView;
+//        }
+//    }
 }
