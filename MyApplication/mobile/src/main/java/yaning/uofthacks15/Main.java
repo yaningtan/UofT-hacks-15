@@ -46,11 +46,19 @@ public class Main extends ActionBarActivity {
 
                         //Justin's Function here
                         // Just the first line for now
-                        if (input.charAt(input.length()-1) == '*')
-                            displaySuggestions(input.split(" \\*")[0]);
+                        //separable means the phrase has one or more *'s in it
+                        boolean separable = false;
+                        for (int i = 0; i <= input.length()-1; i++)
+                        {
+                            if(input.charAt(i)== '*')
+                            separable = true;
+                        }
+
+                        if(!separable)
+                            displaySuggestions(input);
                         //Andrew's Function also here
                         else
-                            textInput.setText("Not available yet.\n");
+                            textInput.setText("Not available yet.");
 
                     }
                 }
@@ -84,7 +92,8 @@ public class Main extends ActionBarActivity {
     public void changeText(String[] suggestions) {
         TextView textInput = (TextView)findViewById(R.id.textInput);
         query = textInput.getText().toString();
-        query = query.replaceFirst("\\*", suggestions[0]);
+        if(suggestions.length != 0 )
+            query = suggestions[0];
         // Apply formatting to the suggestion
         textInput = (TextView)findViewById(R.id.textInput);
         textInput.setText(query);
