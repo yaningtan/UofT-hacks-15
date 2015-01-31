@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.os.Build;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
@@ -18,6 +19,8 @@ import org.json.JSONException;
 
 import android.widget.Button;
 import android.widget.TextView;
+
+import android.graphics.Bitmap;
 
 import java.util.Arrays;
 
@@ -123,6 +126,36 @@ public class Main extends ActionBarActivity {
                 });
 
         requests.add(jsArrayRequest);
+    }
+
+    public void displaySuggestedImage(String input) {
+        // Find the first relevant image
+        String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
+        String[] suggestions;
+        ImageView mImageView;
+
+        // Parse the query and turn it into url
+        input = input.replaceAll(" ", "+");
+        input = input.replaceAll("\"", "%22");
+
+        url += input;
+
+        ImageRequest request = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
+                        mImageView.setImageBitmap(bitmap);
+                    }
+                }, 0, 0, null,
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
+                        mImageView.setImageResource(0); // R.drawable.image_load_error
+                    }
+                });
+
+        requests.add(request);
     }
 
     /**
