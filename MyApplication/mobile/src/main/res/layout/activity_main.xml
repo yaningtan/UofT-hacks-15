@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:text="Clear"
         android:textSize="8pt"
-        android:id="@+id/button"
+        android:id="@+id/clearButton"
         android:layout_alignTop="@+id/inputButton"
         android:layout_alignLeft="@+id/textInput"
         android:layout_alignStart="@+id/textInput" />
