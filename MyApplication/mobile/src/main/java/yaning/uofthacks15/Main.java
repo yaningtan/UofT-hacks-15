@@ -8,14 +8,18 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.graphics.Color;
 import android.view.MenuItem;
 import android.view.View;
+import android.text.style.*;
+import android.text.*;
 import android.view.ViewGroup;
 import android.os.Build;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
 import org.json.JSONArray;
 import org.json.JSONException;
+import 	android.widget.TextView.BufferType;
 
 import android.widget.Button;
 import android.widget.TextView;
@@ -100,6 +104,42 @@ public class Main extends ActionBarActivity {
         if(suggestions.length != 0 )
             query = suggestions[0];
         textInput.setText(query);
+
+
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+
+        //query = textInput.getText().toString();
+        //query = "*";
+        //query = query.replaceFirst("\\*", suggestions[0]);
+
+        String original_word = sep(textInput.getText().toString());
+        SpannableString wordSpan= new SpannableString(original_word);
+        wordSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, original_word.length(), 0);
+        builder.append(wordSpan);
+
+        String suggested_word = suggestions[0];
+        String rest_word = suggested_word.substring(original_word.length(), suggested_word.length());
+        SpannableString sugSpan= new SpannableString(rest_word);
+        sugSpan.setSpan(new ForegroundColorSpan(Color.RED), 0, rest_word.length(), 0);
+        builder.append(sugSpan);
+
+        //query = builder.toString();
+        // Apply formatting to the suggestion
+        //textInput = (TextView)findViewById(R.id.textInput);
+
+        //textInput.setText(builder, BufferType.SPANNABLE);
+        textInput.setText(original_word.length() + rest_word + suggested_word.length() );
+
+    }
+
+    public static String sep(String s)
+    {
+        int l = s.indexOf("-");
+        if (l >0)
+        {
+            return s.substring(0, l);
+        }
+        return "";
 
     }
 
