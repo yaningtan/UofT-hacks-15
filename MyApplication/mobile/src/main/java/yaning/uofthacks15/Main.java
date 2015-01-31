@@ -19,8 +19,10 @@ import org.json.JSONException;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.Arrays;
+
 public class Main extends ActionBarActivity {
-    RequestQueue requests = Volley.newRequestQueue(this);
+    RequestQueue requests;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +46,8 @@ public class Main extends ActionBarActivity {
 
                         //Justin's Function here
                         // Just the first line for now
-                        if (input.charAt(input.length()) == '*')
-                            displaySuggestions(input.split(" *")[0]);
+                        if (input.charAt(input.length()-1) == '*')
+                            displaySuggestions(input.split(" \\*")[0]);
                         //Andrew's Function also here
                         else
                             textInput.setText("Not available yet.\n");
@@ -53,6 +55,7 @@ public class Main extends ActionBarActivity {
                     }
                 }
         );
+        requests = Volley.newRequestQueue(this);
     }
 
     @Override
@@ -77,24 +80,37 @@ public class Main extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void displaySuggestions(String query) {
-        String url = "http://suggestqueries.google.com/complete/search?q=&client=toolbar";
+    private String query;
+    public void changeText(String[] suggestions) {
+        TextView textInput = (TextView)findViewById(R.id.textInput);
+        query = textInput.getText().toString();
+        query = query.replaceFirst("\\*", suggestions[0]);
+        // Apply formatting to the suggestion
+        textInput = (TextView)findViewById(R.id.textInput);
+        textInput.setText(query);
+
+    }
+
+    public void displaySuggestions(String input) {
+        String url = "http://suggestqueries.google.com/complete/search?q=&client=android";
         String[] suggestions;
 
         // Parse the query and turn it into url
-        query = query.replaceAll(" ", "+");
-        query = query.replaceAll("\"", "%22");
+        input = input.replaceAll(" ", "+");
+        input = input.replaceAll("\"", "%22");
 
-        url = url.replace("q=", "q=" + query);
+        url = url.replace("q=", "q=" + input);
 
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest
                 (url, new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            String[] suggestions = ((String[]) response.get(1));
+                            String[] suggestions = response.get(1).toString().split("\\[\"|\".\"|\"\\]");
+                            suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length-2);
                             
                             // Update the text field
+                            changeText(suggestions);
                         } catch (JSONException e) {
 
                         }
@@ -102,7 +118,7 @@ public class Main extends ActionBarActivity {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        // Don't change text area
+
                     }
                 });
 
