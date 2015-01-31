@@ -10,10 +10,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import com.android.volley.*;
+import com.android.volley.toolbox.*;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 
 public class Main extends ActionBarActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +51,47 @@ public class Main extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    public void displaySuggestions(String query) {
+        String url = "http://suggestqueries.google.com/complete/search?q=&client=toolbar";
+        String[] suggestions;
+        RequestQueue requests = Volley.newRequestQueue(this);
+
+        // Parse the query and turn it into url
+        // https://www.google.ca/search?q=%22something+borrowed%22&oq=%22something+borrowed%22&aqs=chrome..69i57.5542j0j7&sourceid=chrome&es_sm=93&ie=UTF-8
+
+        query = query.replaceAll(" ", "+");
+        query = query.replaceAll("\"", "%22");
+
+        url = url.replace("q=", "q=" + query);
+
+        JsonArrayRequest jsArrayRequest = new JsonArrayRequest
+                (url, new Response.Listener<JSONArray>() {
+
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            String[] suggestions = ((String[]) response.get(1));
+                            
+                            // Update the text field
+                        } catch (JSONException e) {
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Don't change text area
+                    }
+                });
+
+        requests.add(jsArrayRequest);
+    }
+
     /**
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment {
-
         public PlaceholderFragment() {
         }
 
