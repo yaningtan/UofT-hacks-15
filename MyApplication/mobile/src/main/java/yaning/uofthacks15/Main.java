@@ -135,7 +135,8 @@ public class Main extends ActionBarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        ResultParser.parse(response);
+                        TextView textInput = (TextView)findViewById(R.id.textInput);
+                        textInput.setText(ResultParser.parse(response));
                     }
                 }, new Response.ErrorListener() {
             @Override
