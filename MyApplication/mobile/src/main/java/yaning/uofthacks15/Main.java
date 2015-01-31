@@ -20,6 +20,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class Main extends ActionBarActivity {
+    RequestQueue requests = Volley.newRequestQueue(this);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,7 +52,6 @@ public class Main extends ActionBarActivity {
         );
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -76,11 +77,8 @@ public class Main extends ActionBarActivity {
     public void displaySuggestions(String query) {
         String url = "http://suggestqueries.google.com/complete/search?q=&client=toolbar";
         String[] suggestions;
-        RequestQueue requests = Volley.newRequestQueue(this);
 
         // Parse the query and turn it into url
-        // https://www.google.ca/search?q=%22something+borrowed%22&oq=%22something+borrowed%22&aqs=chrome..69i57.5542j0j7&sourceid=chrome&es_sm=93&ie=UTF-8
-
         query = query.replaceAll(" ", "+");
         query = query.replaceAll("\"", "%22");
 
@@ -88,7 +86,6 @@ public class Main extends ActionBarActivity {
 
         JsonArrayRequest jsArrayRequest = new JsonArrayRequest
                 (url, new Response.Listener<JSONArray>() {
-
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
@@ -100,7 +97,6 @@ public class Main extends ActionBarActivity {
                         }
                     }
                 }, new Response.ErrorListener() {
-
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // Don't change text area
