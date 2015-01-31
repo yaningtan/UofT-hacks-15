@@ -77,12 +77,8 @@ public class Main extends ActionBarActivity {
 
                         if(!separable)
                             displaySuggestions(input);
-
-                        if (input.charAt(input.length()-1) == '*')
-                            displaySuggestions(input.split(" \\*")[0]);
-                        //Andrew's Function also here
-                        else if (input.charAt (input.length()-1) != '*')
-                        {displayAutocomplete(input);}
+                        else if (input.charAt(input.length()-1) != '*')
+                            displayAutocomplete(input);
                         else
                             textInput.setText("Not available yet.");
 
@@ -114,9 +110,14 @@ public class Main extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //private String query;
+    private String query;
     public void changeText(String[] suggestions) {
         TextView textInput = (TextView)findViewById(R.id.textInput);
+        query = textInput.getText().toString();
+        if(suggestions.length != 0 )
+            query = suggestions[0];
+        textInput.setText(query);
+
 
         SpannableStringBuilder builder = new SpannableStringBuilder();
 
@@ -171,10 +172,12 @@ public class Main extends ActionBarActivity {
                     public void onResponse(JSONArray response) {
                         try {
                             String[] suggestions = response.get(1).toString().split("\\[\"|\".\"|\"\\]");
-                            suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length-2);
 
-                            // Update the text field
-                            changeText(suggestions);
+                            if (suggestions.length > 1) {// Update the text field
+                                suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length - 1);
+                                changeText(suggestions);
+                            }
+
                         } catch (JSONException e) {
 
                         }
