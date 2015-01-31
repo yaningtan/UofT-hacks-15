@@ -17,8 +17,8 @@ public class ResultParser {
 
         for (Iterator<Element> i = elems.iterator(); i.hasNext();){
             Element e = i.next();
-            ret.add(e.data());
-            System.out.println(e.data());
+            ret.add(e.html());
+            System.out.println(e.html()); // debug
         }
 
 
