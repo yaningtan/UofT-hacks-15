@@ -107,14 +107,9 @@ public class Main extends ActionBarActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-<<<<<<< HEAD
-                            String[] suggestions = ((String[]) response.get(1));
-
-=======
                             String[] suggestions = response.get(1).toString().split("\\[\"|\".\"|\"\\]");
                             suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length-2);
-                            
->>>>>>> b17e54a119a9de7bed5255b2f8351634c588382c
+
                             // Update the text field
                             changeText(suggestions);
                         } catch (JSONException e) {
