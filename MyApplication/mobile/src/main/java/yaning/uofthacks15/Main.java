@@ -52,12 +52,9 @@ public class Main extends ActionBarActivity {
         Button searchButton = (Button) findViewById(R.id.searchButton);
         Button clearButton = (Button) findViewById(R.id.clearButton);
         Button createButton = (Button) findViewById(R.id.createButton);
-        Button googleButton = (Button) findViewById(R.id.googleButton);) findViewById(R.id.quoteText);
-
-        // initialize quotataion
+        Button googleButton = (Button) findViewById(R.id.googleButton);
         displayQuotation("inspirational");
 
-        // bind onClicks
         clearButton.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
