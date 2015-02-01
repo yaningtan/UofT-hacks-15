@@ -32,7 +32,7 @@ import java.util.Arrays;
 
 public class Main extends ActionBarActivity {
     RequestQueue requests;
-    RandomWord rw = new RandomWord(getAssets());
+    //RandomWord rw = new RandomWord(getAssets());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,13 +80,11 @@ public class Main extends ActionBarActivity {
 
                         if(!separable) {
                             displaySuggestions(input);
-                        } else if (input.charAt(input.length()-1) != '*') {
-                            displayAutocomplete(input);
                         } else {
                             displayAutocomplete(input);
                         }
 
-                        displaySuggestedImage(input);
+                        //displaySuggestedImage(input);
 
                     }
                 }
@@ -240,8 +238,9 @@ public class Main extends ActionBarActivity {
 
     public void displaySuggestedImage(String input) {
         // Find the first relevant image
-        //String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
-        String url = "https://www.flickr.com/search?text=";
+        String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
+        //String url = "https://www.flickr.com/search?text=";
+        //String url = "https://c1.staticflickr.com/9/8669/16405780632_8a9c3d13a9.jpg";
         String[] suggestions;
         ImageView mImageView;
 
@@ -259,8 +258,13 @@ public class Main extends ActionBarActivity {
                     public void onResponse(String response) {
                         ImageView imageView = (ImageView) findViewById(R.id.imageView);
                         try {
-                            InputStream is = (InputStream) new URL(ImageParser.parse(response)).getContent();
-                            Bitmap bitmap = BitmapFactory.decodeStream(is);
+                            //InputStream is = (InputStream) new URL(ImageParser.parse(response)).getContent();
+                            //Bitmap bitmap = BitmapFactory.decodeStream(is);
+                            String s = ImageParser.parse(response);
+                            System.out.println(s);
+                            Bitmap bitmap = BitmapFactory.decodeFile(s);
+                            if (bitmap == null)
+                                throw new NullPointerException();
                             imageView.setImageBitmap(bitmap);
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -299,10 +303,10 @@ public class Main extends ActionBarActivity {
                 (TextView) findViewById(R.id.textInput);
         textInput.setText("");
 
-        String s1 = rw.getString();
-        String s2 = rw.getString();
+        //String s1 = rw.getString();
+        //String s2 = rw.getString();
 
-        displayAutocomplete(s1 + " * " + s2);
+        //displayAutocomplete(s1 + " * " + s2);
     }
 
     public void displayAutocomplete(String query) {
