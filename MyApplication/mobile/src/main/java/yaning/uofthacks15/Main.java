@@ -199,35 +199,35 @@ public class Main extends ActionBarActivity {
         requests.add(jsArrayRequest);
     }
 
-    public void displaySuggestedImage(String input) {
-        // Find the first relevant image
-        String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
-        String[] suggestions;
-        ImageView mImageView;
-
-        // Parse the query and turn it into url
-        input = input.replaceAll(" ", "+");
-        input = input.replaceAll("\"", "%22");
-
-        url += input;
-
-        ImageRequest request = new ImageRequest(url,
-                new Response.Listener<Bitmap>() {
-                    @Override
-                    public void onResponse(Bitmap bitmap) {
-                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
-                        mImageView.setImageBitmap(bitmap);
-                    }
-                }, 0, 0, null,
-                new Response.ErrorListener() {
-                    public void onErrorResponse(VolleyError error) {
-                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
-                        mImageView.setImageResource(0); // R.drawable.image_load_error
-                    }
-                });
-
-        requests.add(request);
-    }
+//    public void displaySuggestedImage(String input) {
+//        // Find the first relevant image
+//        String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
+//        String[] suggestions;
+//        ImageView mImageView;
+//
+//        // Parse the query and turn it into url
+//        input = input.replaceAll(" ", "+");
+//        input = input.replaceAll("\"", "%22");
+//
+//        url += input;
+//
+//        ImageRequest request = new ImageRequest(url,
+//                new Response.Listener<Bitmap>() {
+//                    @Override
+//                    public void onResponse(Bitmap bitmap) {
+//                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
+//                        mImageView.setImageBitmap(bitmap);
+//                    }
+//                }, 0, 0, null,
+//                new Response.ErrorListener() {
+//                    public void onErrorResponse(VolleyError error) {
+//                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
+//                        mImageView.setImageResource(0); // R.drawable.image_load_error
+//                    }
+//                });
+//
+//        requests.add(request);
+//    }
 
     public void displayAutocomplete(String query) {
         String url = "";
