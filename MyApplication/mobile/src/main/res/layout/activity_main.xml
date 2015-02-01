@@ -36,13 +36,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/invisButton"
-        android:visibility="invisible"
-        android:layout_below="@+id/searchButton"
-        android:layout_centerHorizontal="true" />
-
-
-
-
+        android:text="Create"
+        android:textSize="8pt"
+        android:id="@+id/createButton"
+        android:layout_above="@+id/listView"
+        android:layout_alignRight="@+id/textInput"
+        android:layout_alignEnd="@+id/textInput" />
 
 </RelativeLayout>

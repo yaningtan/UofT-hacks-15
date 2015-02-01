@@ -25,7 +25,9 @@ import android.graphics.Bitmap;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class Main extends ActionBarActivity {
     RequestQueue requests;
@@ -40,6 +42,7 @@ public class Main extends ActionBarActivity {
 
         Button searchButton = (Button) findViewById(R.id.searchButton);
         Button clearButton = (Button) findViewById(R.id.clearButton);
+        Button createButton = (Button) findViewById(R.id.createButton);
 
         searchButton.setEnabled(true);
 
@@ -53,7 +56,6 @@ public class Main extends ActionBarActivity {
                     }
                 }
         );
-
 
         searchButton.setOnClickListener(
                 new Button.OnClickListener() {
@@ -83,6 +85,15 @@ public class Main extends ActionBarActivity {
                     }
                 }
         );
+
+        createButton.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        displayRandom();
+                    }
+                }
+        );
+
         requests = Volley.newRequestQueue(this);
     }
 
@@ -200,6 +211,41 @@ public class Main extends ActionBarActivity {
         requests.add(jsArrayRequest);
     }
 
+    public void displayRandom() {
+        // define alphabets
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        String vowels = "aeiou";
+
+        // clear
+        TextView textInput =
+                (TextView) findViewById(R.id.textInput);
+        textInput.setText("");
+
+        // generate random word seeds
+        Random r = new Random();
+        ArrayList<String> words = new ArrayList<String>();
+        words.add("cow");
+        words.add("apple");
+        words.add("food");
+        words.add("hungry");
+        words.add("line");
+        words.add("app");
+        words.add("chicken");
+        words.add("julio");
+        words.add("out");
+        words.add("hot");
+        words.add("whole");
+        words.add("salad");
+        words.add("much");
+        words.add("soup");
+        words.add("tea");
+        words.add("university");
+
+        String s1 = words.get(r.nextInt(words.size()));
+        String s2 = words.get(r.nextInt(words.size()));
+
+        displayAutocomplete(s1 + " * " + s2);
+    }
 //    public void displaySuggestedImage(String input) {
 //        // Find the first relevant image
 //        String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
