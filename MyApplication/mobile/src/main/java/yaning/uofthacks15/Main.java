@@ -85,9 +85,6 @@ public class Main extends ActionBarActivity {
                         searchButton.setEnabled(false);
                         searchButton.setText("Running..,");
 
-
-
-
                         TextView textInput =
                                 (TextView)findViewById(R.id.textInput);
 
@@ -109,9 +106,6 @@ public class Main extends ActionBarActivity {
                         }
 
                         //displaySuggestedImage(input);
-
-
-
                     }
                 }
         );
@@ -144,11 +138,7 @@ public class Main extends ActionBarActivity {
                         searchButton.setEnabled(false);
                         searchButton.setText("Running...");
 
-
                         displayRandom();
-
-
-
                     }
 
                     public void reset() {
@@ -243,8 +233,6 @@ public class Main extends ActionBarActivity {
 
         textInput.setText(builder, TextView.BufferType.SPANNABLE);
         //textInput.setText(original_word + rest_word + suggested_word.length() );
-
-
     }
 
     public static String sep(String s)
@@ -255,7 +243,6 @@ public class Main extends ActionBarActivity {
             return s.substring(0, l);
         }
         return "";
-
     }
 
     public void displaySuggestions(String input) {
@@ -281,7 +268,6 @@ public class Main extends ActionBarActivity {
                             } else{
                                 Log.d("Unsearchable:", " failed");
                             }
-
 
                         } catch (JSONException e) {
 
@@ -318,7 +304,7 @@ public class Main extends ActionBarActivity {
                     @Override
                     public void onResponse(String response) {
                         ImageView imageView = (ImageView) findViewById(R.id.imageView);
-                        /*try {
+                        try {
                             //InputStream is = (InputStream) new URL(ImageParser.parse(response)).getContent();
                             //Bitmap bitmap = BitmapFactory.decodeStream(is);
                             String s = ImageParser.parse(response);
@@ -329,7 +315,7 @@ public class Main extends ActionBarActivity {
                             imageView.setImageBitmap(bitmap);
                         } catch (Exception e) {
                             e.printStackTrace();
-                        }*/
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -396,25 +382,10 @@ public class Main extends ActionBarActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                error.printStackTrace();
             }
         });
 
         requests.add(stringRequest);
     }
-
-//    /**
-//     * A placeholder fragment containing a simple view.
-//     */
-//    public static class PlaceholderFragment extends Fragment {
-//        public PlaceholderFragment() {
-//        }
-//
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState) {
-//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//            return rootView;
-//        }
-//    }
 }
