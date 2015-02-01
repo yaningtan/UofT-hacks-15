@@ -67,7 +67,7 @@ public class Main extends ActionBarActivity {
                         Button searchButton = (Button)  findViewById(R.id.searchButton);
 
                         createButton.setEnabled(true);
-                        createButton.setText("Create");
+                        createButton.setText("Spark an Idea!");
                         searchButton.setEnabled(true);
                         searchButton.setText("Search");
                     }
@@ -240,7 +240,7 @@ public class Main extends ActionBarActivity {
         Button searchButton = (Button)  findViewById(R.id.searchButton);
 
         createButton.setEnabled(true);
-        createButton.setText("Create");
+        createButton.setText("Spark an Idea!");
         searchButton.setEnabled(true);
         searchButton.setText("Search");
 
@@ -386,7 +386,7 @@ public class Main extends ActionBarActivity {
                         Button searchButton = (Button)  findViewById(R.id.searchButton);
 
                         createButton.setEnabled(true);
-                        createButton.setText("Create");
+                        createButton.setText("Spark an Idea!");
                         searchButton.setEnabled(true);
                         searchButton.setText("Search");
                     }
