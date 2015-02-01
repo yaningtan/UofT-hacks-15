@@ -3,16 +3,13 @@ package yaning.uofthacks15;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.graphics.Color;
 import android.view.MenuItem;
+import android.view.Menu;
 import android.view.View;
 import android.text.style.*;
 import android.text.*;
-import android.widget.ImageView;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
 import org.json.JSONArray;
@@ -20,9 +17,8 @@ import org.json.JSONException;
 
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ImageView;
 import android.graphics.BitmapFactory;
-
-import android.content.Context;
 
 import android.graphics.Bitmap;
 import java.io.*;
@@ -30,9 +26,7 @@ import java.io.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 public class Main extends ActionBarActivity {
     RequestQueue requests;
@@ -141,7 +135,6 @@ public class Main extends ActionBarActivity {
 
     // Google search result for the phrase
     public void launchBrowser(String phrase) {
-
         try {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_VIEW);
@@ -268,13 +261,13 @@ public class Main extends ActionBarActivity {
                             Bitmap bitmap = BitmapFactory.decodeStream(is);
                             imageView.setImageBitmap(bitmap);
                         } catch (Exception e) {
-                            System.out.println(e.getLocalizedMessage());
+                            e.printStackTrace();
                         }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println(error.getLocalizedMessage());
+                error.printStackTrace();
             }
         });
 

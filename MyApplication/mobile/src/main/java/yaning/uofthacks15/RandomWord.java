@@ -2,6 +2,7 @@ package yaning.uofthacks15;
 
 import android.content.res.AssetManager;
 
+import android.content.Context;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
