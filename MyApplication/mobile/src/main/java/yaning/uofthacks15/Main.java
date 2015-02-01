@@ -244,6 +244,14 @@ public class Main extends ActionBarActivity {
         textInput.setText(builder, TextView.BufferType.SPANNABLE);
         //textInput.setText(original_word + rest_word + suggested_word.length() );
 
+        Button createButton = (Button)  findViewById(R.id.createButton);
+        Button searchButton = (Button)  findViewById(R.id.searchButton);
+
+        createButton.setEnabled(true);
+        createButton.setText("Create");
+        searchButton.setEnabled(true);
+        searchButton.setText("Search");
+
 
     }
 
