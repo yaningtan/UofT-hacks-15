@@ -32,6 +32,8 @@ import java.net.URLEncoder;
 import java.net.URL;
 import java.util.Arrays;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.lang.Thread;
 
@@ -396,5 +398,41 @@ public class Main extends ActionBarActivity {
         });
 
         requests.add(stringRequest);
+    }
+
+    public void displayQuotation(String category) {
+        String url = "https://andruxnet-random-famous-quotes.p.mashape.com/cat=" + category;
+
+        JsonArrayRequest jsArrayRequest = new JsonArrayRequest
+                (url, new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        try {
+                            response.getJSONObject(1).getString("quote");
+                            response.getJSONObject(1).getString("author");
+
+
+                        } catch (JSONException e) {
+
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String>  params = new HashMap<String, String>();
+                params.put("X-Mashape-Key", "i2MlU5krZQmshurWA6BXjTHofP0yp1odJwfjsnFZDyrZyTC266");
+                params.put("Content-Type", "application/x-www-form-urlencoded");
+                params.put("Accept", "application/json");
+
+                return params;
+            }
+        };;
+
+        requests.add(jsArrayRequest);
     }
 }
