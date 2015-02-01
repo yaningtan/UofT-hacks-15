@@ -77,10 +77,8 @@ public class Main extends ActionBarActivity {
 
                         if(!separable)
                             displaySuggestions(input);
-                        else if (input.charAt(input.length()-1) != '*')
-                            displayAutocomplete(input);
                         else
-                            textInput.setText("Not available yet.");
+                            displayAutocomplete(input);
 
                     }
                 }
