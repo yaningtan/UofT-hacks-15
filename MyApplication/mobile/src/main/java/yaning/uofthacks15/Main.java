@@ -41,6 +41,8 @@ public class Main extends ActionBarActivity {
         Button searchButton = (Button) findViewById(R.id.searchButton);
         Button clearButton = (Button) findViewById(R.id.clearButton);
 
+        searchButton.setEnabled(true);
+
         clearButton.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
@@ -55,6 +57,7 @@ public class Main extends ActionBarActivity {
 
         searchButton.setOnClickListener(
                 new Button.OnClickListener() {
+
                     public void onClick(View v) {
                         TextView textInput =
                                 (TextView)findViewById(R.id.textInput);

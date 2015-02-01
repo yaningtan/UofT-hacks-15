@@ -17,9 +17,11 @@
         android:text="Search"
         android:textSize="8pt"
         android:id="@+id/searchButton"
-        android:layout_above="@+id/listView"
+        android:layout_below="@+id/textInput"
         android:layout_alignRight="@+id/textInput"
-        android:layout_alignEnd="@+id/textInput" />
+        android:layout_alignEnd="@+id/textInput"
+        android:layout_marginTop="52dp" />
+
 
     <Button
         android:layout_width="wrap_content"
@@ -27,17 +29,20 @@
         android:text="Clear"
         android:textSize="8pt"
         android:id="@+id/clearButton"
-        android:layout_above="@+id/listView"
+        android:layout_above="@+id/invisButton"
         android:layout_alignLeft="@+id/textInput"
         android:layout_alignStart="@+id/textInput" />
 
-    <ListView
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listView"
+        android:id="@+id/invisButton"
+        android:visibility="invisible"
         android:layout_below="@+id/searchButton"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="45dp" />
+        android:layout_centerHorizontal="true" />
+
+
+
+
 
 </RelativeLayout>
