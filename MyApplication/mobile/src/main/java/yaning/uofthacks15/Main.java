@@ -52,8 +52,6 @@ public class Main extends ActionBarActivity {
         Button createButton = (Button) findViewById(R.id.createButton);
         Button googleButton = (Button) findViewById(R.id.googleButton);
 
-
-
         clearButton.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
