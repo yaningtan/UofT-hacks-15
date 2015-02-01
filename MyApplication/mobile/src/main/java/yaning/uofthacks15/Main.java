@@ -32,7 +32,7 @@ import java.util.Random;
 
 public class Main extends ActionBarActivity {
     RequestQueue requests;
-    RandomWord rw = new RandomWord(getAssets());
+    RandomWord rw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,7 +93,7 @@ public class Main extends ActionBarActivity {
                     }
                 }
         );
-
+        rw = new RandomWord(getAssets());
         requests = Volley.newRequestQueue(this);
     }
 
