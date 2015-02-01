@@ -395,4 +395,9 @@ public class Main extends ActionBarActivity {
 
         requests.add(stringRequest);
     }
+
+    public void linkQuotation(String quotation) {
+        String query = "%22" + quotation + "%22";
+        launchBrowser(query);
+    }
 }
