@@ -36,7 +36,7 @@ import java.util.Random;
 
 public class Main extends ActionBarActivity {
     RequestQueue requests;
-    RandomWord r = new RandomWord();
+    RandomWord rw = new RandomWord();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -304,38 +304,8 @@ public class Main extends ActionBarActivity {
                 (TextView) findViewById(R.id.textInput);
         textInput.setText("");
 
-        // generate random word seeds
-        Random r = new Random();
-        ArrayList<String> words = new ArrayList<String>();
-        words.add("cow");
-        words.add("apple");
-        words.add("food");
-        words.add("hungry");
-        words.add("line");
-        words.add("app");
-        words.add("chicken");
-        words.add("julio");
-        words.add("out");
-        words.add("hot");
-        words.add("whole");
-        words.add("salad");
-        words.add("much");
-        words.add("soup");
-        words.add("tea");
-        words.add("university");
-        words.add("bench");
-        words.add("volleyball");
-        words.add("grape");
-        words.add("hiking");
-        words.add("provocative");
-        words.add("set");
-        words.add("break");
-        words.add("brain");
-        words.add("think");
-        words.add("waste");
-
-        String s1 = r.getString();
-        String s2 = r.getString();
+        String s1 = rw.getString();
+        String s2 = rw.getString();
 
         displayAutocomplete(s1 + " * " + s2);
     }

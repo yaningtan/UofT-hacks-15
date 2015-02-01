@@ -1,7 +1,10 @@
 package yaning.uofthacks15;
 
+import android.content.res.AssetManager;
+
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -15,10 +18,15 @@ public class RandomWord {
 
     public RandomWord() {
         try {
-            Scanner s = new Scanner(new FileReader("words.txt"));
+            AssetManager am = context.getAssets();
+            Scanner s = new Scanner(am.open("words.txt"));
             while (s.hasNext())
                 word_list.add(s.nextLine());
-        } catch (FileNotFoundException e) {}
+        } catch (FileNotFoundException e) {
+
+        } catch (IOException e) {
+
+        }
     }
 
     public int numWords() {
