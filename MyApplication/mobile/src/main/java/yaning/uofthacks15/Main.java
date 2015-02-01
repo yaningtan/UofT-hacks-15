@@ -1,7 +1,7 @@
 package yaning.uofthacks15;
 
-
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.graphics.Color;
@@ -17,11 +17,16 @@ import org.json.JSONException;
 
 import android.widget.Button;
 import android.widget.TextView;
+import android.graphics.BitmapFactory;
+
+import android.content.Context;
 
 import android.graphics.Bitmap;
+import java.io.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.net.URL;
 import java.util.Arrays;
 
 public class Main extends ActionBarActivity {
@@ -69,11 +74,13 @@ public class Main extends ActionBarActivity {
                             separable = true;
                         }
 
-                        if(!separable)
+                        if(!separable) {
                             displaySuggestions(input);
-                        else if (input.charAt(input.length()-1) != '*')
+                            displaySuggestedImage(input);
+                        } else if (input.charAt(input.length()-1) != '*') {
                             displayAutocomplete(input);
-                        else
+                            displaySuggestedImage(input);
+                        } else
                             textInput.setText("Not available yet.");
 
                     }
@@ -102,6 +109,13 @@ public class Main extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void launchBrowser(String phrase) {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setData(android.net.Uri.parse(phrase));
+        getApplicationContext().startActivity(intent);
     }
 
     private String query;
@@ -134,7 +148,7 @@ public class Main extends ActionBarActivity {
         // Apply formatting to the suggestion
         //textInput = (TextView)findViewById(R.id.textInput);
 
-        textInput.setText(builder, BufferType.SPANNABLE);
+        textInput.setText(builder, TextView.BufferType.SPANNABLE);
         //textInput.setText(original_word + rest_word + suggested_word.length() );
 
     }
@@ -188,7 +202,8 @@ public class Main extends ActionBarActivity {
 
     public void displaySuggestedImage(String input) {
         // Find the first relevant image
-        String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
+        //String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
+        String url = "https://www.flickr.com/search?text=";
         String[] suggestions;
         ImageView mImageView;
 
@@ -198,12 +213,32 @@ public class Main extends ActionBarActivity {
 
         url += input;
 
-        ImageRequest request = new ImageRequest(url,
+        // Find the first image
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                        try {
+                            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(ImageParser.parse(response)).getContent());
+                            imageView.setImageBitmap(bitmap);
+                        } catch (Exception e) {}
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requests.add(stringRequest);
+
+        /*ImageRequest request = new ImageRequest(url,
                 new Response.Listener<Bitmap>() {
                     @Override
                     public void onResponse(Bitmap bitmap) {
-                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
-                        mImageView.setImageBitmap(bitmap);
+                        displaySuggestedImage();
                     }
                 }, 0, 0, null,
                 new Response.ErrorListener() {
@@ -213,7 +248,7 @@ public class Main extends ActionBarActivity {
                     }
                 });
 
-        requests.add(request);
+        requests.add(request);*/
     }
 
     public void displayAutocomplete(String query) {
