@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.view.View;
+import android.view.MenuItem;
 import android.text.style.*;
 import android.text.*;
 import android.content.Context;
@@ -16,6 +17,7 @@ import com.android.volley.*;
 import com.android.volley.toolbox.*;
 import org.json.JSONArray;
 import org.json.JSONException;
+
 
 import android.widget.Button;
 import android.widget.TextView;
@@ -30,9 +32,12 @@ import java.net.URLEncoder;
 import java.net.URL;
 import java.util.Arrays;
 
+import java.util.Random;
+import java.lang.Thread;
+
 public class Main extends ActionBarActivity {
     RequestQueue requests;
-    //RandomWord rw = new RandomWord(getAssets());
+    RandomWord rw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +52,7 @@ public class Main extends ActionBarActivity {
         Button createButton = (Button) findViewById(R.id.createButton);
         Button googleButton = (Button) findViewById(R.id.googleButton);
 
-        searchButton.setEnabled(true);
+
 
         clearButton.setOnClickListener(
                 new Button.OnClickListener() {
@@ -64,6 +69,11 @@ public class Main extends ActionBarActivity {
                 new Button.OnClickListener() {
 
                     public void onClick(View v) {
+                        Button createButton = (Button) findViewById(R.id.createButton);
+                        createButton.setEnabled(false);
+
+
+
                         TextView textInput =
                                 (TextView)findViewById(R.id.textInput);
 
@@ -86,15 +96,45 @@ public class Main extends ActionBarActivity {
 
                         //displaySuggestedImage(input);
 
+
+                        createButton.setEnabled(true);
+
                     }
                 }
         );
 
         createButton.setOnClickListener(
                 new Button.OnClickListener() {
+                    private Boolean clickable = true;
+
                     public void onClick(View v) {
+                        /*if(clickable) {
+                            clickable = false;
+                            //displayRandom();
+                            TextView textInput =
+                                    (TextView)findViewById(R.id.textInput);
+                            textInput.setText("work");
+                            try{
+                                Thread.sleep(1000);
+                            } catch(InterruptedException e) {
+                            }
+
+                            reset();
+                            textInput.setText("nowork");
+                        }*/
+
+                        Button createButton = (Button) findViewById(R.id.createButton);
+                        createButton.setEnabled(false);
                         displayRandom();
+
+                        createButton.setEnabled(true);
+
                     }
+
+                    public void reset() {
+                        clickable = true;
+                    }
+
                 }
         );
 
@@ -108,6 +148,7 @@ public class Main extends ActionBarActivity {
                     }
         });
 
+        rw = new RandomWord(getAssets());
         requests = Volley.newRequestQueue(this);
     }
 
