@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.graphics.Color;
@@ -176,7 +177,10 @@ public class Main extends ActionBarActivity {
                             if (suggestions.length > 1) {// Update the text field
                                 suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length - 1);
                                 changeText(suggestions);
+                            } else{
+                                Log.d("Unsearchable:", " failed");
                             }
+
 
                         } catch (JSONException e) {
 
