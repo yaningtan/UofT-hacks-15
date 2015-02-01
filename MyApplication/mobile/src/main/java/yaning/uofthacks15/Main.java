@@ -361,10 +361,10 @@ public class Main extends ActionBarActivity {
                 (TextView) findViewById(R.id.textInput);
         textInput.setText("");
 
-        //String s1 = rw.getString();
-        //String s2 = rw.getString();
+        String s1 = rw.getString();
+        String s2 = rw.getString();
 
-        //displayAutocomplete(s1 + " * " + s2);
+        displayAutocomplete(s1 + " * " + s2);
     }
 
     public void displayAutocomplete(String query) {

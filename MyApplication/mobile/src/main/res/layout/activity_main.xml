@@ -77,12 +77,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
+        android:text="Loading Quote..."
         android:id="@+id/quoteText"
+        android:password="false"
+        android:maxWidth="100dp"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_marginBottom="40dp"
+        android:layout_alignRight="@+id/createButton"
+        android:layout_alignEnd="@+id/createButton"
+        android:layout_alignLeft="@+id/createButton"
+        android:layout_alignStart="@+id/createButton" />
 
 </RelativeLayout>
