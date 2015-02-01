@@ -235,6 +235,17 @@ public class Main extends ActionBarActivity {
         words.add("soup");
         words.add("tea");
         words.add("university");
+        words.add("bench");
+        words.add("volleyball");
+        words.add("grape");
+        words.add("hiking");
+        words.add("provocative");
+        words.add("set");
+        words.add("break");
+        words.add("brain");
+        words.add("think");
+        words.add("waste");
+
 
         String s1 = words.get(r.nextInt(words.size()));
         String s2 = words.get(r.nextInt(words.size()));
