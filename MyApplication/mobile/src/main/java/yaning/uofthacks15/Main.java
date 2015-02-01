@@ -3,6 +3,9 @@ package yaning.uofthacks15;
 import android.support.v7.app.ActionBarActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.graphics.Color;
 import android.view.MenuItem;
@@ -27,7 +30,9 @@ import java.io.*;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class Main extends ActionBarActivity {
     RequestQueue requests;
@@ -40,8 +45,12 @@ public class Main extends ActionBarActivity {
             getSupportFragmentManager().beginTransaction().commit();
         }
 
-        Button inputButton = (Button) findViewById(R.id.inputButton);
+        Button searchButton = (Button) findViewById(R.id.searchButton);
         Button clearButton = (Button) findViewById(R.id.clearButton);
+        Button createButton = (Button) findViewById(R.id.createButton);
+        Button googleButton = (Button) findViewById(R.id.googleButton);
+
+        searchButton.setEnabled(true);
 
         clearButton.setOnClickListener(
                 new Button.OnClickListener() {
@@ -54,17 +63,15 @@ public class Main extends ActionBarActivity {
                 }
         );
 
-
-        inputButton.setOnClickListener(
+        searchButton.setOnClickListener(
                 new Button.OnClickListener() {
+
                     public void onClick(View v) {
                         TextView textInput =
                                 (TextView)findViewById(R.id.textInput);
 
                         String input = textInput.getText().toString();
 
-
-                        //Justin's Function here
                         // Just the first line for now
                         //separable means the phrase has one or more *'s in it
                         boolean separable = false;
@@ -76,16 +83,36 @@ public class Main extends ActionBarActivity {
 
                         if(!separable) {
                             displaySuggestions(input);
-                            displaySuggestedImage(input);
                         } else if (input.charAt(input.length()-1) != '*') {
                             displayAutocomplete(input);
-                            displaySuggestedImage(input);
-                        } else
-                            textInput.setText("Not available yet.");
+                        } else {
+                            displayAutocomplete(input);
+                        }
+
+                        displaySuggestedImage(input);
 
                     }
                 }
         );
+
+        createButton.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        displayRandom();
+                    }
+                }
+        );
+
+        googleButton.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        TextView textInput =
+                                (TextView)findViewById(R.id.textInput);
+
+                        launchBrowser(textInput.getText().toString());
+                    }
+        });
+
         requests = Volley.newRequestQueue(this);
     }
 
@@ -111,20 +138,26 @@ public class Main extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // Google search result for the phrase
     public void launchBrowser(String phrase) {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setData(android.net.Uri.parse(phrase));
-        getApplicationContext().startActivity(intent);
+
+        try {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(android.net.Uri.parse("https://google.com/#q=" + phrase));
+            this.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String query;
     public void changeText(String[] suggestions) {
         TextView textInput = (TextView)findViewById(R.id.textInput);
-        query = textInput.getText().toString();
+       /* query = textInput.getText().toString();
         if(suggestions.length != 0 )
             query = suggestions[0];
-        textInput.setText(query);
+        textInput.setText(query);*/
 
 
         SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -133,7 +166,9 @@ public class Main extends ActionBarActivity {
         //query = "*";
         //query = query.replaceFirst("\\*", suggestions[0]);
 
-        String original_word = sep(textInput.getText().toString());
+        //String original_word = sep(textInput.getText().toString());
+        String original_word = textInput.getText().toString();
+
         SpannableString wordSpan= new SpannableString(original_word);
         wordSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, original_word.length(), 0);
         builder.append(wordSpan);
@@ -148,8 +183,12 @@ public class Main extends ActionBarActivity {
         // Apply formatting to the suggestion
         //textInput = (TextView)findViewById(R.id.textInput);
 
+        // textInput.setText(builder, BufferType.SPANNABLE);
+        //textInput.setText(original_word + " " +  rest_word + suggested_word.length() );
+
         textInput.setText(builder, TextView.BufferType.SPANNABLE);
         //textInput.setText(original_word + rest_word + suggested_word.length() );
+
 
     }
 
@@ -184,7 +223,10 @@ public class Main extends ActionBarActivity {
                             if (suggestions.length > 1) {// Update the text field
                                 suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length - 1);
                                 changeText(suggestions);
+                            } else{
+                                Log.d("Unsearchable:", " failed");
                             }
+
 
                         } catch (JSONException e) {
 
@@ -221,14 +263,17 @@ public class Main extends ActionBarActivity {
                     public void onResponse(String response) {
                         ImageView imageView = (ImageView) findViewById(R.id.imageView);
                         try {
-                            Bitmap bitmap = BitmapFactory.decodeStream((InputStream) new URL(ImageParser.parse(response)).getContent());
+                            InputStream is = (InputStream) new URL(ImageParser.parse(response)).getContent();
+                            Bitmap bitmap = BitmapFactory.decodeStream(is);
                             imageView.setImageBitmap(bitmap);
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                            System.out.println(e.getLocalizedMessage());
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                System.out.println(error.getLocalizedMessage());
             }
         });
 
@@ -249,6 +294,39 @@ public class Main extends ActionBarActivity {
                 });
 
         requests.add(request);*/
+    }
+
+    public void displayRandom() {
+
+        // clear
+        TextView textInput =
+                (TextView) findViewById(R.id.textInput);
+        textInput.setText("");
+
+        // generate random word seeds
+        Random r = new Random();
+        ArrayList<String> words = new ArrayList<String>();
+        words.add("cow");
+        words.add("apple");
+        words.add("food");
+        words.add("hungry");
+        words.add("line");
+        words.add("app");
+        words.add("chicken");
+        words.add("julio");
+        words.add("out");
+        words.add("hot");
+        words.add("whole");
+        words.add("salad");
+        words.add("much");
+        words.add("soup");
+        words.add("tea");
+        words.add("university");
+
+        String s1 = words.get(r.nextInt(words.size()));
+        String s2 = words.get(r.nextInt(words.size()));
+
+        displayAutocomplete(s1 + " * " + s2);
     }
 
     public void displayAutocomplete(String query) {
