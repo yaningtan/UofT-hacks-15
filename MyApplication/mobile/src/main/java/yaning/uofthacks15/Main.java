@@ -58,6 +58,14 @@ public class Main extends ActionBarActivity {
                                 (TextView) findViewById(R.id.textInput);
 
                         textInput.setText("");
+
+                        Button createButton = (Button)  findViewById(R.id.createButton);
+                        Button searchButton = (Button)  findViewById(R.id.searchButton);
+
+                        createButton.setEnabled(true);
+                        createButton.setText("Create");
+                        searchButton.setEnabled(true);
+                        searchButton.setText("Search");
                     }
                 }
         );
@@ -67,7 +75,13 @@ public class Main extends ActionBarActivity {
 
                     public void onClick(View v) {
                         Button createButton = (Button) findViewById(R.id.createButton);
+                        Button searchButton = (Button) findViewById(R.id.searchButton);
+
                         createButton.setEnabled(false);
+                        createButton.setText("Running...");
+                        searchButton.setEnabled(false);
+                        searchButton.setText("Running..,");
+
 
 
 
@@ -91,7 +105,6 @@ public class Main extends ActionBarActivity {
                             displayAutocomplete(input);
 
 
-                        createButton.setEnabled(true);
 
                     }
                 }
@@ -118,10 +131,17 @@ public class Main extends ActionBarActivity {
                         }*/
 
                         Button createButton = (Button) findViewById(R.id.createButton);
+                        Button searchButton = (Button) findViewById(R.id.searchButton);
+
                         createButton.setEnabled(false);
+                        createButton.setText("Running...");
+                        searchButton.setEnabled(false);
+                        searchButton.setText("Running...");
+
+
                         displayRandom();
 
-                        createButton.setEnabled(true);
+
 
                     }
 
@@ -305,6 +325,14 @@ public class Main extends ActionBarActivity {
                     public void onResponse(String response) {
                         TextView textInput = (TextView) findViewById(R.id.textInput);
                         textInput.setText(ResultParser.parse(response));
+
+                        Button createButton = (Button)  findViewById(R.id.createButton);
+                        Button searchButton = (Button)  findViewById(R.id.searchButton);
+
+                        createButton.setEnabled(true);
+                        createButton.setText("Create");
+                        searchButton.setEnabled(true);
+                        searchButton.setText("Search");
                     }
                 }, new Response.ErrorListener() {
             @Override
