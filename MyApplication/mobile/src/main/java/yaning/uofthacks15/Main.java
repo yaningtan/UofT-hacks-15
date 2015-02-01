@@ -36,6 +36,19 @@ public class Main extends ActionBarActivity {
         }
 
         Button inputButton = (Button) findViewById(R.id.inputButton);
+        Button clearButton = (Button) findViewById(R.id.clearButton);
+
+        clearButton.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        TextView textInput =
+                                (TextView) findViewById(R.id.textInput);
+
+                        textInput.setText("");
+                    }
+                }
+        );
+
 
         inputButton.setOnClickListener(
                 new Button.OnClickListener() {
@@ -114,21 +127,21 @@ public class Main extends ActionBarActivity {
         String suggested_word = suggestions[0];
         String rest_word = suggested_word.substring(original_word.length(), suggested_word.length());
         SpannableString sugSpan= new SpannableString(rest_word);
-        sugSpan.setSpan(new ForegroundColorSpan(Color.RED), 0, rest_word.length(), 0);
+        sugSpan.setSpan(new ForegroundColorSpan(Color.GRAY), 0, rest_word.length(), 0);
         builder.append(sugSpan);
 
         //query = builder.toString();
         // Apply formatting to the suggestion
         //textInput = (TextView)findViewById(R.id.textInput);
 
-        //textInput.setText(builder, BufferType.SPANNABLE);
-        textInput.setText(original_word.length() + rest_word + suggested_word.length() );
+        textInput.setText(builder, BufferType.SPANNABLE);
+        //textInput.setText(original_word + rest_word + suggested_word.length() );
 
     }
 
     public static String sep(String s)
     {
-        int l = s.indexOf("-");
+        int l = s.indexOf(" *");
         if (l >0)
         {
             return s.substring(0, l);
