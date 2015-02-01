@@ -1,15 +1,14 @@
 package yaning.uofthacks15;
 
-
 import android.support.v7.app.ActionBarActivity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
 import android.graphics.Color;
 import android.view.MenuItem;
+import android.view.Menu;
 import android.view.View;
+import android.view.MenuItem;
 import android.text.style.*;
 import android.text.*;
 import android.content.Context;
@@ -19,16 +18,22 @@ import com.android.volley.toolbox.*;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.ImageView;
+import android.graphics.BitmapFactory;
 
 import android.graphics.Bitmap;
+import java.io.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.ArrayList;
+import java.net.URL;
 import java.util.Arrays;
+
 import java.util.Random;
+import java.lang.Thread;
 
 public class Main extends ActionBarActivity {
     RequestQueue requests;
@@ -45,8 +50,9 @@ public class Main extends ActionBarActivity {
         Button searchButton = (Button) findViewById(R.id.searchButton);
         Button clearButton = (Button) findViewById(R.id.clearButton);
         Button createButton = (Button) findViewById(R.id.createButton);
+        Button googleButton = (Button) findViewById(R.id.googleButton);
 
-        searchButton.setEnabled(true);
+
 
         clearButton.setOnClickListener(
                 new Button.OnClickListener() {
@@ -63,6 +69,11 @@ public class Main extends ActionBarActivity {
                 new Button.OnClickListener() {
 
                     public void onClick(View v) {
+                        Button createButton = (Button) findViewById(R.id.createButton);
+                        createButton.setEnabled(false);
+
+
+
                         TextView textInput =
                                 (TextView)findViewById(R.id.textInput);
 
@@ -77,10 +88,16 @@ public class Main extends ActionBarActivity {
                             separable = true;
                         }
 
-                        if(!separable)
+                        if(!separable) {
                             displaySuggestions(input);
-                        else
+                        } else {
                             displayAutocomplete(input);
+                        }
+
+                        //displaySuggestedImage(input);
+
+
+                        createButton.setEnabled(true);
 
                     }
                 }
@@ -88,11 +105,49 @@ public class Main extends ActionBarActivity {
 
         createButton.setOnClickListener(
                 new Button.OnClickListener() {
+                    private Boolean clickable = true;
+
                     public void onClick(View v) {
+                        /*if(clickable) {
+                            clickable = false;
+                            //displayRandom();
+                            TextView textInput =
+                                    (TextView)findViewById(R.id.textInput);
+                            textInput.setText("work");
+                            try{
+                                Thread.sleep(1000);
+                            } catch(InterruptedException e) {
+                            }
+
+                            reset();
+                            textInput.setText("nowork");
+                        }*/
+
+                        Button createButton = (Button) findViewById(R.id.createButton);
+                        createButton.setEnabled(false);
                         displayRandom();
+
+                        createButton.setEnabled(true);
+
                     }
+
+                    public void reset() {
+                        clickable = true;
+                    }
+
                 }
         );
+
+        googleButton.setOnClickListener(
+                new Button.OnClickListener() {
+                    public void onClick(View v) {
+                        TextView textInput =
+                                (TextView)findViewById(R.id.textInput);
+
+                        launchBrowser(textInput.getText().toString());
+                    }
+        });
+
         rw = new RandomWord(getAssets());
         requests = Volley.newRequestQueue(this);
     }
@@ -117,6 +172,18 @@ public class Main extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // Google search result for the phrase
+    public void launchBrowser(String phrase) {
+        try {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setData(android.net.Uri.parse("https://google.com/#q=" + phrase));
+            this.startActivity(intent);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private String query;
@@ -151,8 +218,7 @@ public class Main extends ActionBarActivity {
         // Apply formatting to the suggestion
         //textInput = (TextView)findViewById(R.id.textInput);
 
-
-       // textInput.setText(builder, BufferType.SPANNABLE);
+        // textInput.setText(builder, BufferType.SPANNABLE);
         //textInput.setText(original_word + " " +  rest_word + suggested_word.length() );
 
         textInput.setText(builder, TextView.BufferType.SPANNABLE);
@@ -211,6 +277,66 @@ public class Main extends ActionBarActivity {
         requests.add(jsArrayRequest);
     }
 
+    public void displaySuggestedImage(String input) {
+        // Find the first relevant image
+        String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
+        //String url = "https://www.flickr.com/search?text=";
+        //String url = "https://c1.staticflickr.com/9/8669/16405780632_8a9c3d13a9.jpg";
+        String[] suggestions;
+        ImageView mImageView;
+
+        // Parse the query and turn it into url
+        input = input.replaceAll(" ", "+");
+        input = input.replaceAll("\"", "%22");
+
+        url += input;
+
+        // Find the first image
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        ImageView imageView = (ImageView) findViewById(R.id.imageView);
+                        try {
+                            //InputStream is = (InputStream) new URL(ImageParser.parse(response)).getContent();
+                            //Bitmap bitmap = BitmapFactory.decodeStream(is);
+                            String s = ImageParser.parse(response);
+                            System.out.println(s);
+                            Bitmap bitmap = BitmapFactory.decodeFile(s);
+                            if (bitmap == null)
+                                throw new NullPointerException();
+                            imageView.setImageBitmap(bitmap);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        requests.add(stringRequest);
+
+        /*ImageRequest request = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        displaySuggestedImage();
+                    }
+                }, 0, 0, null,
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
+                        mImageView.setImageResource(0); // R.drawable.image_load_error
+                    }
+                });
+
+        requests.add(request);*/
+    }
+
     public void displayRandom() {
 
         // clear
@@ -218,40 +344,11 @@ public class Main extends ActionBarActivity {
                 (TextView) findViewById(R.id.textInput);
         textInput.setText("");
 
-        String s1 = rw.getString();
-        String s2 = rw.getString();
+        //String s1 = rw.getString();
+        //String s2 = rw.getString();
 
-        displayAutocomplete(s1 + " * " + s2);
+        //displayAutocomplete(s1 + " * " + s2);
     }
-//    public void displaySuggestedImage(String input) {
-//        // Find the first relevant image
-//        String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
-//        String[] suggestions;
-//        ImageView mImageView;
-//
-//        // Parse the query and turn it into url
-//        input = input.replaceAll(" ", "+");
-//        input = input.replaceAll("\"", "%22");
-//
-//        url += input;
-//
-//        ImageRequest request = new ImageRequest(url,
-//                new Response.Listener<Bitmap>() {
-//                    @Override
-//                    public void onResponse(Bitmap bitmap) {
-//                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
-//                        mImageView.setImageBitmap(bitmap);
-//                    }
-//                }, 0, 0, null,
-//                new Response.ErrorListener() {
-//                    public void onErrorResponse(VolleyError error) {
-//                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
-//                        mImageView.setImageResource(0); // R.drawable.image_load_error
-//                    }
-//                });
-//
-//        requests.add(request);
-//    }
 
     public void displayAutocomplete(String query) {
         String url = "";
