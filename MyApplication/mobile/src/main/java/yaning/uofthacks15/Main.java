@@ -2,8 +2,6 @@ package yaning.uofthacks15;
 
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -14,16 +12,16 @@ import android.view.MenuItem;
 import android.view.View;
 import android.text.style.*;
 import android.text.*;
-import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.ImageView;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
 import org.json.JSONArray;
 import org.json.JSONException;
-import 	android.widget.TextView.BufferType;
 
 import android.widget.Button;
 import android.widget.TextView;
+
+import android.graphics.Bitmap;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -37,9 +35,7 @@ public class Main extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-//                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+            getSupportFragmentManager().beginTransaction().commit();
         }
 
         Button inputButton = (Button) findViewById(R.id.inputButton);
@@ -141,7 +137,7 @@ public class Main extends ActionBarActivity {
         // Apply formatting to the suggestion
         //textInput = (TextView)findViewById(R.id.textInput);
 
-        textInput.setText(builder, BufferType.SPANNABLE);
+        textInput.setText(builder, TextView.BufferType.SPANNABLE);
         //textInput.setText(original_word + rest_word + suggested_word.length() );
 
     }
@@ -196,6 +192,36 @@ public class Main extends ActionBarActivity {
         requests.add(jsArrayRequest);
     }
 
+    public void displaySuggestedImage(String input) {
+        // Find the first relevant image
+        String url = "https://www.google.ca/search?tbm=isch&tbs=itp:photo&q=";
+        String[] suggestions;
+        ImageView mImageView;
+
+        // Parse the query and turn it into url
+        input = input.replaceAll(" ", "+");
+        input = input.replaceAll("\"", "%22");
+
+        url += input;
+
+        ImageRequest request = new ImageRequest(url,
+                new Response.Listener<Bitmap>() {
+                    @Override
+                    public void onResponse(Bitmap bitmap) {
+                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
+                        mImageView.setImageBitmap(bitmap);
+                    }
+                }, 0, 0, null,
+                new Response.ErrorListener() {
+                    public void onErrorResponse(VolleyError error) {
+                        ImageView mImageView = (ImageView) Main.this.findViewById(R.id.imageView);
+                        mImageView.setImageResource(0); // R.drawable.image_load_error
+                    }
+                });
+
+        requests.add(request);
+    }
+
     public void displayAutocomplete(String query) {
         String url = "";
         try {
@@ -208,7 +234,7 @@ public class Main extends ActionBarActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        TextView textInput = (TextView)findViewById(R.id.textInput);
+                        TextView textInput = (TextView) findViewById(R.id.textInput);
                         textInput.setText(ResultParser.parse(response));
                     }
                 }, new Response.ErrorListener() {
