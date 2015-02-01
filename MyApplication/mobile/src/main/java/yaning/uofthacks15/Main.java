@@ -318,7 +318,7 @@ public class Main extends ActionBarActivity {
                     @Override
                     public void onResponse(String response) {
                         ImageView imageView = (ImageView) findViewById(R.id.imageView);
-                        try {
+                        /*try {
                             //InputStream is = (InputStream) new URL(ImageParser.parse(response)).getContent();
                             //Bitmap bitmap = BitmapFactory.decodeStream(is);
                             String s = ImageParser.parse(response);
@@ -329,7 +329,7 @@ public class Main extends ActionBarActivity {
                             imageView.setImageBitmap(bitmap);
                         } catch (Exception e) {
                             e.printStackTrace();
-                        }
+                        }*/
                     }
                 }, new Response.ErrorListener() {
             @Override
