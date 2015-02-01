@@ -52,10 +52,12 @@ public class Main extends ActionBarActivity {
         Button searchButton = (Button) findViewById(R.id.searchButton);
         Button clearButton = (Button) findViewById(R.id.clearButton);
         Button createButton = (Button) findViewById(R.id.createButton);
-        Button googleButton = (Button) findViewById(R.id.googleButton);
+        Button googleButton = (Button) findViewById(R.id.googleButton);) findViewById(R.id.quoteText);
 
+        // initialize quotataion
+        displayQuotation("inspirational");
 
-
+        // bind onClicks
         clearButton.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
@@ -408,9 +410,12 @@ public class Main extends ActionBarActivity {
                     @Override
                     public void onResponse(JSONArray response) {
                         try {
-                            response.getJSONObject(1).getString("quote");
-                            response.getJSONObject(1).getString("author");
+                            String quote = response.getJSONObject(1).getString("quote");
+                            String author = response.getJSONObject(1).getString("author");
 
+                            TextView quoteText = (TextView) findViewById(R.id.quoteText);
+
+                            quoteText.setText(quote + "\n--" + author);
 
                         } catch (JSONException e) {
 
