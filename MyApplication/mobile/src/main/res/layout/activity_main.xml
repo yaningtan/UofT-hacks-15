@@ -29,7 +29,7 @@
         android:text="Clear"
         android:textSize="8pt"
         android:id="@+id/clearButton"
-        android:layout_above="@+id/invisButton"
+        android:layout_alignTop="@+id/searchButton"
         android:layout_alignLeft="@+id/textInput"
         android:layout_alignStart="@+id/textInput" />
 
@@ -39,8 +39,11 @@
         android:text="Create"
         android:textSize="8pt"
         android:id="@+id/createButton"
-        android:layout_above="@+id/listView"
-        android:layout_alignRight="@+id/textInput"
-        android:layout_alignEnd="@+id/textInput" />
+        android:layout_below="@+id/searchButton"
+        android:layout_alignRight="@+id/searchButton"
+        android:layout_alignEnd="@+id/searchButton"
+        android:layout_marginTop="69dp"
+        android:layout_alignLeft="@+id/clearButton"
+        android:layout_alignStart="@+id/clearButton" />
 
 </RelativeLayout>

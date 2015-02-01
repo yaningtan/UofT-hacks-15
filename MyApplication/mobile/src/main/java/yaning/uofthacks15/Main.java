@@ -212,9 +212,6 @@ public class Main extends ActionBarActivity {
     }
 
     public void displayRandom() {
-        // define alphabets
-        String alphabet = "abcdefghijklmnopqrstuvwxyz";
-        String vowels = "aeiou";
 
         // clear
         TextView textInput =
