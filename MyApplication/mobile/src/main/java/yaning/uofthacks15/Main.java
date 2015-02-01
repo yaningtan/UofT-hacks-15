@@ -31,6 +31,7 @@ import java.util.Random;
 
 public class Main extends ActionBarActivity {
     RequestQueue requests;
+    RandomWord r = new RandomWord();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,9 +247,8 @@ public class Main extends ActionBarActivity {
         words.add("think");
         words.add("waste");
 
-
-        String s1 = words.get(r.nextInt(words.size()));
-        String s2 = words.get(r.nextInt(words.size()));
+        String s1 = r.getString();
+        String s2 = r.getString();
 
         displayAutocomplete(s1 + " * " + s2);
     }
