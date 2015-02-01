@@ -30,7 +30,10 @@ public class ResultParser {
                 freq.add(Collections.frequency(ret, s));
             int max_ind = freq.indexOf(Collections.max(freq));
 
-            return ret.get(max_ind);
+            String retstr = ret.get(max_ind);
+            retstr = retstr.replaceAll("[^a-zA-Z ]", "");
+
+            return retstr;
         } catch (Exception e) {
             return "";
         }
