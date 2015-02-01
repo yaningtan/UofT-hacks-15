@@ -113,10 +113,10 @@ public class Main extends ActionBarActivity {
     private String query;
     public void changeText(String[] suggestions) {
         TextView textInput = (TextView)findViewById(R.id.textInput);
-        query = textInput.getText().toString();
+       /* query = textInput.getText().toString();
         if(suggestions.length != 0 )
             query = suggestions[0];
-        textInput.setText(query);
+        textInput.setText(query);*/
 
 
         SpannableStringBuilder builder = new SpannableStringBuilder();
@@ -125,7 +125,9 @@ public class Main extends ActionBarActivity {
         //query = "*";
         //query = query.replaceFirst("\\*", suggestions[0]);
 
-        String original_word = sep(textInput.getText().toString());
+        //String original_word = sep(textInput.getText().toString());
+        String original_word = textInput.getText().toString();
+
         SpannableString wordSpan= new SpannableString(original_word);
         wordSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, original_word.length(), 0);
         builder.append(wordSpan);
@@ -141,7 +143,7 @@ public class Main extends ActionBarActivity {
         //textInput = (TextView)findViewById(R.id.textInput);
 
         textInput.setText(builder, BufferType.SPANNABLE);
-        //textInput.setText(original_word + rest_word + suggested_word.length() );
+        //textInput.setText(original_word + " " +  rest_word + suggested_word.length() );
 
     }
 
