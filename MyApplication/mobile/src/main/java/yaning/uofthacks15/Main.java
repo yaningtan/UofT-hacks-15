@@ -38,7 +38,7 @@ public class Main extends ActionBarActivity {
             getSupportFragmentManager().beginTransaction().commit();
         }
 
-        Button inputButton = (Button) findViewById(R.id.inputButton);
+        Button searchButton = (Button) findViewById(R.id.searchButton);
         Button clearButton = (Button) findViewById(R.id.clearButton);
 
         clearButton.setOnClickListener(
@@ -53,7 +53,7 @@ public class Main extends ActionBarActivity {
         );
 
 
-        inputButton.setOnClickListener(
+        searchButton.setOnClickListener(
                 new Button.OnClickListener() {
                     public void onClick(View v) {
                         TextView textInput =
@@ -61,8 +61,6 @@ public class Main extends ActionBarActivity {
 
                         String input = textInput.getText().toString();
 
-
-                        //Justin's Function here
                         // Just the first line for now
                         //separable means the phrase has one or more *'s in it
                         boolean separable = false;
