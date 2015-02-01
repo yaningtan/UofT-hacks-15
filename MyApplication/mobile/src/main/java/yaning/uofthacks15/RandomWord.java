@@ -16,9 +16,8 @@ public class RandomWord {
     private ArrayList<String> word_list = new ArrayList<String>();
     private Random r = new Random();
 
-    public RandomWord() {
+    public RandomWord(AssetManager am) {
         try {
-            AssetManager am = context.getAssets();
             Scanner s = new Scanner(am.open("words.txt"));
             while (s.hasNext())
                 word_list.add(s.nextLine());

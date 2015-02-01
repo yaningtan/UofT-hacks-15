@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.text.style.*;
 import android.text.*;
+import android.content.Context;
 import android.widget.ImageView;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
@@ -31,7 +32,7 @@ import java.util.Random;
 
 public class Main extends ActionBarActivity {
     RequestQueue requests;
-    RandomWord rw = new RandomWord();
+    RandomWord rw = new RandomWord(getAssets());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
