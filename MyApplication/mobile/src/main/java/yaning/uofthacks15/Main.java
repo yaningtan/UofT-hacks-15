@@ -2,16 +2,14 @@ package yaning.uofthacks15;
 
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
+import android.graphics.Color;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
+import android.text.style.*;
+import android.text.*;
 import android.widget.ImageView;
-import android.os.Build;
 import com.android.volley.*;
 import com.android.volley.toolbox.*;
 import org.json.JSONArray;
@@ -22,6 +20,8 @@ import android.widget.TextView;
 
 import android.graphics.Bitmap;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 
 public class Main extends ActionBarActivity {
@@ -32,9 +32,7 @@ public class Main extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+            getSupportFragmentManager().beginTransaction().commit();
         }
 
         Button inputButton = (Button) findViewById(R.id.inputButton);
@@ -47,13 +45,23 @@ public class Main extends ActionBarActivity {
 
                         String input = textInput.getText().toString();
 
+
                         //Justin's Function here
                         // Just the first line for now
-                        if (input.charAt(input.length()-1) == '*')
-                            displaySuggestions(input.split(" \\*")[0]);
-                        //Andrew's Function also here
+                        //separable means the phrase has one or more *'s in it
+                        boolean separable = false;
+                        for (int i = 0; i <= input.length()-1; i++)
+                        {
+                            if(input.charAt(i)== '*')
+                            separable = true;
+                        }
+
+                        if(!separable)
+                            displaySuggestions(input);
+                        else if (input.charAt(input.length()-1) != '*')
+                            displayAutocomplete(input);
                         else
-                            textInput.setText("Not available yet.\n");
+                            textInput.setText("Not available yet.");
 
                     }
                 }
@@ -87,10 +95,45 @@ public class Main extends ActionBarActivity {
     public void changeText(String[] suggestions) {
         TextView textInput = (TextView)findViewById(R.id.textInput);
         query = textInput.getText().toString();
-        query = query.replaceFirst("\\*", suggestions[0]);
-        // Apply formatting to the suggestion
-        textInput = (TextView)findViewById(R.id.textInput);
+        if(suggestions.length != 0 )
+            query = suggestions[0];
         textInput.setText(query);
+
+
+        SpannableStringBuilder builder = new SpannableStringBuilder();
+
+        //query = textInput.getText().toString();
+        //query = "*";
+        //query = query.replaceFirst("\\*", suggestions[0]);
+
+        String original_word = sep(textInput.getText().toString());
+        SpannableString wordSpan= new SpannableString(original_word);
+        wordSpan.setSpan(new ForegroundColorSpan(Color.BLACK), 0, original_word.length(), 0);
+        builder.append(wordSpan);
+
+        String suggested_word = suggestions[0];
+        String rest_word = suggested_word.substring(original_word.length(), suggested_word.length());
+        SpannableString sugSpan= new SpannableString(rest_word);
+        sugSpan.setSpan(new ForegroundColorSpan(Color.RED), 0, rest_word.length(), 0);
+        builder.append(sugSpan);
+
+        //query = builder.toString();
+        // Apply formatting to the suggestion
+        //textInput = (TextView)findViewById(R.id.textInput);
+
+        //textInput.setText(builder, BufferType.SPANNABLE);
+        textInput.setText(original_word.length() + rest_word + suggested_word.length() );
+
+    }
+
+    public static String sep(String s)
+    {
+        int l = s.indexOf("-");
+        if (l >0)
+        {
+            return s.substring(0, l);
+        }
+        return "";
 
     }
 
@@ -110,10 +153,12 @@ public class Main extends ActionBarActivity {
                     public void onResponse(JSONArray response) {
                         try {
                             String[] suggestions = response.get(1).toString().split("\\[\"|\".\"|\"\\]");
-                            suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length-2);
-                            
-                            // Update the text field
-                            changeText(suggestions);
+
+                            if (suggestions.length > 1) {// Update the text field
+                                suggestions = Arrays.copyOfRange(suggestions, 1, suggestions.length - 1);
+                                changeText(suggestions);
+                            }
+
                         } catch (JSONException e) {
 
                         }
@@ -158,18 +203,43 @@ public class Main extends ActionBarActivity {
         requests.add(request);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        public PlaceholderFragment() {
-        }
+    public void displayAutocomplete(String query) {
+        String url = "";
+        try {
+           url = "http://google.com/search?q=" + URLEncoder.encode('"' + query + '"', "UTF-8");
+        } catch (UnsupportedEncodingException e) {}
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
+
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        TextView textInput = (TextView) findViewById(R.id.textInput);
+                        textInput.setText(ResultParser.parse(response));
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requests.add(stringRequest);
     }
+
+//    /**
+//     * A placeholder fragment containing a simple view.
+//     */
+//    public static class PlaceholderFragment extends Fragment {
+//        public PlaceholderFragment() {
+//        }
+//
+//        @Override
+//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+//                                 Bundle savedInstanceState) {
+//            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+//            return rootView;
+//        }
+//    }
 }
